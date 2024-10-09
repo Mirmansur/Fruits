@@ -4,6 +4,7 @@ import img3 from "../../assets/img3.png";
 import img4 from "../../assets/img4.png";
 import img5 from "../../assets/img5.png";
 import Category_Carousel from "./Catigori_Product";
+import Images from "../All/Imgaes";
 import ProductList from "./Product";
 
 const products = [
@@ -39,6 +40,7 @@ const Main = () => {
       </div>
       <Category_Carousel />
       <ProductList />
+      <Images />
     </div>
   );
 };
