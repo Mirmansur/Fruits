@@ -18,7 +18,6 @@ const Card = () => {
     <div className="container mx-auto p-4 min-h-screen">
       {cartProducts.length > 0 ? (
         <div className="flex space-x-8 mt-60">
-          {/* Mahsulotlar qismi */}
           <div className="flex-grow space-y-4">
             {cartProducts.map((product) => (
               <div
@@ -29,7 +28,7 @@ const Card = () => {
                   <img
                     src={`https://task-project-s0rr.onrender.com/images/${product.image}`}
                     alt={product.name}
-                    className="w-28 h-28 object-cover rounded"
+                    className="w-28 h-28 object-contain rounded"
                   />
                   <div className="flex flex-col">
                     <h3 className="text-lg font-semibold">{product.name}</h3>
@@ -54,7 +53,6 @@ const Card = () => {
             ))}
           </div>
 
-          {/* Jami qismi */}
           <div className="bg-white border border-gray-200 rounded-lg shadow-md p-4 w-80">
             <h3 className="text-lg font-semibold mb-4">Jami</h3>
             <p className="text-gray-700">
