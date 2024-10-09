@@ -8,7 +8,8 @@ import {
 } from "@ant-design/icons";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setSearch } from "../../redux/slice/searchSlice";
 
 const menu = (
   <Menu>
@@ -18,10 +19,13 @@ const menu = (
 );
 
 const Header = () => {
+  const dispatch = useDispatch();
+
   const liked = useSelector((state) => state.liked.value);
   const { products } = useSelector((state) => state.cards);
   let boxs = products.length;
   let son = liked.length;
+
   return (
     <div className="w-full fixed top-0 left-0 ring-0 z-10 bg-white">
       {/* Top Bar */}
@@ -71,6 +75,7 @@ const Header = () => {
 
         <div className="w-full sm:w-1/2 mx-0 sm:mx-8 my-4 sm:my-0">
           <Input.Search
+            onChange={(e) => dispatch(setSearch(e.target.value))}
             placeholder="Search for products..."
             size="large"
             className="w-full"

@@ -6,8 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 function Products() {
   const dispatch = useDispatch();
   const [products, setProducts] = useState([]);
+
+  console.log(products);
+
   const [error, setError] = useState("");
   const likedProducts = useSelector((state) => state.liked.value);
+
+  const searchValue = useSelector((state) => state.searchData.products);
+  console.log(searchValue);
 
   useEffect(() => {
     fetch("https://task-project-s0rr.onrender.com/product/get")
@@ -17,18 +23,26 @@ function Products() {
         }
         return response.json();
       })
-      .then((data) => setProducts(data))
+      .then((data) => {
+        const SearcheData =
+          searchValue.length > 0
+            ? data.filter((product) =>
+                product.name.toLowerCase().includes(searchValue.toLowerCase())
+              )
+            : data;
+        setProducts(SearcheData);
+      })
       .catch((error) => {
         console.error("Error fetching products:", error);
         setError("Failed to fetch products. Please try again later.");
       });
-  }, []);
+  }, [searchValue]);
+
   const isProductLiked = (productId) => {
     return likedProducts?.some((product) => product.id === productId);
   };
 
   const addToCarts = (product) => {
-    console.log(product);
     dispatch(addToCart(product));
   };
   return (
