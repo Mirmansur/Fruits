@@ -7,10 +7,10 @@ import { toggleHeart } from "../../redux/slice/likeSlice";
 function Products() {
   const dispatch = useDispatch();
   const [products, setProducts] = useState([]);
+  const [quantities, setQuantities] = useState({}); // Each product's quantity
 
   const [error, setError] = useState("");
-  const likedProducts = useSelector((state) => state.liked.value); // Yoqtirilgan mahsulotlar ro'yxati
-
+  const likedProducts = useSelector((state) => state.liked.value);
   const searchValue = useSelector((state) => state.searchData.products);
 
   useEffect(() => {
@@ -29,6 +29,12 @@ function Products() {
               )
             : data;
         setProducts(SearcheData);
+        // Initialize quantities state with product IDs
+        const initialQuantities = {};
+        data.forEach((product) => {
+          initialQuantities[product.id] = 1; // Start with quantity 1 for each product
+        });
+        setQuantities(initialQuantities);
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
@@ -36,17 +42,24 @@ function Products() {
       });
   }, [searchValue]);
 
-  // Mahsulot yoqtirilganligini tekshirish
   const isProductLiked = (productId) => {
     return likedProducts?.some((product) => product.id === productId);
   };
 
   const addToCarts = (product) => {
-    dispatch(addToCart(product));
+    dispatch(addToCart({ ...product, quantity: quantities[product.id] }));
   };
 
   const handleLikeToggle = (product) => {
     dispatch(toggleHeart(product));
+  };
+
+  const handleQuantityChange = (productId, change) => {
+    setQuantities((prevQuantities) => {
+      const updatedQuantity = prevQuantities[productId] + change;
+      if (updatedQuantity < 1) return prevQuantities; // Prevent quantity going below 1
+      return { ...prevQuantities, [productId]: updatedQuantity };
+    });
   };
 
   return (
@@ -84,11 +97,17 @@ function Products() {
               </p>
               <div className="flex items-center justify-between mt-4">
                 <div className="flex items-center space-x-2">
-                  <button className="bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                  <button
+                    onClick={() => handleQuantityChange(product.id, -1)}
+                    className="bg-gray-200 text-gray-700 px-2 py-1 rounded"
+                  >
                     -
                   </button>
-                  <span>1</span>
-                  <button className="bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                  <span>{quantities[product.id]}</span>
+                  <button
+                    onClick={() => handleQuantityChange(product.id, 1)}
+                    className="bg-gray-200 text-gray-700 px-2 py-1 rounded"
+                  >
                     +
                   </button>
                 </div>
@@ -100,7 +119,7 @@ function Products() {
                 </button>
               </div>
               <button
-                onClick={() => handleLikeToggle(product)} // Like qilish funksiyasini chaqirish
+                onClick={() => handleLikeToggle(product)}
                 className={`absolute top-2 right-2 ${
                   isProductLiked(product.id) ? "text-red-500" : "text-gray-400"
                 } hover:text-red-500`}
