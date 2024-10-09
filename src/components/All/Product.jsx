@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import { addToCart } from "../../redux/slice/cartSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function Products() {
+  const dispatch = useDispatch();
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
   const likedProducts = useSelector((state) => state.liked.value);
@@ -48,9 +49,9 @@ function Products() {
               </div>
               <div className="flex justify-center">
                 <img
-                  src={product.image}
+                  src={`https://task-project-s0rr.onrender.com/images/${product.image}`}
                   alt={product.name}
-                  className="w-32 h-32 object-cover mb-4"
+                  style={{ width: "40%" }}
                 />
               </div>
               <h3 className="text-lg font-semibold text-gray-800 mb-2">
