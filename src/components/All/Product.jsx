@@ -2,18 +2,16 @@ import { useState, useEffect } from "react";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import { addToCart } from "../../redux/slice/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { toggleHeart } from "../../redux/slice/likeSlice";
 
 function Products() {
   const dispatch = useDispatch();
   const [products, setProducts] = useState([]);
 
-  console.log(products);
-
   const [error, setError] = useState("");
-  const likedProducts = useSelector((state) => state.liked.value);
+  const likedProducts = useSelector((state) => state.liked.value); // Yoqtirilgan mahsulotlar ro'yxati
 
   const searchValue = useSelector((state) => state.searchData.products);
-  console.log(searchValue);
 
   useEffect(() => {
     fetch("https://task-project-s0rr.onrender.com/product/get")
@@ -38,6 +36,7 @@ function Products() {
       });
   }, [searchValue]);
 
+  // Mahsulot yoqtirilganligini tekshirish
   const isProductLiked = (productId) => {
     return likedProducts?.some((product) => product.id === productId);
   };
@@ -45,6 +44,11 @@ function Products() {
   const addToCarts = (product) => {
     dispatch(addToCart(product));
   };
+
+  const handleLikeToggle = (product) => {
+    dispatch(toggleHeart(product));
+  };
+
   return (
     <section className="featured-products py-8">
       <h2 className="text-2xl font-bold mb-6 text-center">
@@ -96,8 +100,10 @@ function Products() {
                 </button>
               </div>
               <button
-                onClick={() => isProductLiked(product.id)}
-                className="absolute top-2 right-2 text-gray-400 hover:text-red-500"
+                onClick={() => handleLikeToggle(product)} // Like qilish funksiyasini chaqirish
+                className={`absolute top-2 right-2 ${
+                  isProductLiked(product.id) ? "text-red-500" : "text-gray-400"
+                } hover:text-red-500`}
               >
                 <FaHeart />
               </button>
