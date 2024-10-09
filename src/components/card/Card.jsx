@@ -63,7 +63,7 @@ const Card = () => {
             <p className="text-gray-700 mb-4">
               Jami: {totalPrice.toLocaleString()} so'm
             </p>
-            <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-yellow-600 mb-3">
+            <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 mb-3">
               Muddatli to'lovga olish
             </button>
             <button className="w-full bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300">
